@@ -97,10 +97,6 @@ class TaskListApiController extends Controller
             $message .= "Record was not inserted into database.";
         }
 
-        // Session::flash('task_list_created_message', 'Task List : ' . $task_list_id . ' / ' . $input["task_list_name"] . ' , was created !');   // temp session , for messages on FrontEnd
-
-        // return redirect()->route('task-lists.view');
-
 
         return response()->json([
             "status" => $status,
@@ -115,37 +111,54 @@ class TaskListApiController extends Controller
 
 
 
-    public function edit(TaskList $task_list){
+    // public function edit(TaskList $task_list){
 
-        return view('task-lists.edit', ['task_list' => $task_list] );
+    //     return view('task-lists.edit', ['task_list' => $task_list] );
 
-    }
+    // }
 
 
-    public function update(Request $request,TaskList $task_list){
+    public function update(Request $request, $task_list_id){
+
+        $status = "";
+        $count = 0;
+        $message = "";
 
         $input = $request->all();
         // $user_id = Auth::id();
 
         // dd($input);
 
-        $task_list = TaskList::find($task_list->id);
+        $task_list = TaskList::find($task_list_id);
 
-        $task_list->name =  $input["task_list_name"];
-        $task_list->open_tasks =  $input["task_list_open_tasks"];
-        $task_list->completed_tasks =  $input["task_list_completed_tasks"];
+        $task_list["name"] =  ( isset($input["name"]) && !empty($input["name"]) ) ? $input["name"] : $task_list->name;
+        $task_list["open_tasks"] =  ( isset($input["open_tasks"]) && !empty($input["open_tasks"]) ) ? $input["open_tasks"] : $task_list->open_tasks;
+        $task_list["completed_tasks"] = ( isset($input["completed_tasks"]) && !empty($input["completed_tasks"]) ) ? $input["completed_tasks"] : $task_list->completed_tasks;
+        $task_list["position"] =  ( isset($input["position"]) && !empty($input["position"]) ) ? $input["position"] : $task_list->position;
+        $task_list["is_completed"] =  ( isset($input["is_completed"]) && !empty($input["is_completed"]) ) ? $input["is_completed"] : $task_list->is_completed;
+        $task_list["is_trashed"] =  ( isset($input["is_trashed"]) && !empty($input["is_trashed"]) ) ? $input["is_trashed"] : $task_list->is_trashed;
 
-        $task_list->position =  $input["task_list_position"];
-        $task_list->is_completed =  $input["task_list_is_completed"];
-        $task_list->is_trashed =  $input["task_list_is_trashed"];
 
         // $this->authorize('update', $task);      // policy check , edit ONLY MY task_list 
-        $task_list->save();
+        $status = $task_list->save();
 
-        Session::flash('task_list_updated_message', 'Task List: ' . $task_list->id . ' / ' . $input["task_list_name"] . ' , was updated !');   // temp session , for messages on FrontEnd
+        if( $status ){
+            $status = "success";
+            $count++;
+            $message .= 'Task List : ' . $task_list->id . ' / ' . $input["name"] . ' , was updated !'; 
+        }else{
+            $status = "fail";
+            $message .= 'Task List : ' . $task_list->id . ' / ' . $input["name"] . ' , was NOT updated !'; 
+        }
+        
 
 
-        return redirect()->route('task-lists.view');
+        return response()->json([
+            "status" => $status,
+            "count" => $count,
+            "message" => $message,
+            "data" => $task_list,
+        ]);
 
 
     }
@@ -159,13 +172,30 @@ class TaskListApiController extends Controller
 
     public function destroy(TaskList $task_list){
 
+        $status = "";
+        $count = 0;
+        $message = "";
+
         // dd($task_list->id);
         
-        $task_list->delete();
+        $status = $task_list->delete();
 
-        Session::flash('task_list_deleted_message', 'Task : ' . $task_list->id . ' / ' . $task_list->name . ' , was deleted !');   // temp session , for messages on FrontEnd
+        if( $status ){
+            $status = "success";
+            $count++;
+            $message .= 'Task List : ' . $task_list->id . ' / ' . $task_list->name . ' , was deleted !';  
+        }else{
+            $status = "fail";
+            $message .= 'Task List : ' . $task_list->id . ' / ' . $task_list->name . ' , was NOT deleted !';  
+        }
+        
 
-        return back();
+        return response()->json([
+            "status" => $status,
+            "count" => $count,
+            "message" => $message,
+            "data" => $task_list,
+        ]);
 
     }
 

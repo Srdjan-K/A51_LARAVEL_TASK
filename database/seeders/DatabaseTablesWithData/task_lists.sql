@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 26, 2023 at 02:44 PM
+-- Generation Time: Oct 27, 2023 at 09:36 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.0.26
 
@@ -38,20 +38,22 @@ CREATE TABLE IF NOT EXISTS `task_lists` (
   `is_trashed` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `task_lists`
 --
 
-INSERT INTO `task_lists` (`id`, `name`, `open_tasks`, `completed_tasks`, `position`, `is_completed`, `is_trashed`, `created_at`, `updated_at`) VALUES
-(1, 'To Do', 7, 0, 0, 0, 0, NULL, NULL),
-(2, 'In Progress', 3, 0, 1, 0, 0, NULL, NULL),
-(3, 'Blocked', 0, 0, 2, 0, 1, NULL, NULL),
-(4, 'Ready for review', 3, 1, 3, 0, 0, NULL, NULL),
-(5, 'Testing', 1, 1, 4, 0, 0, NULL, NULL),
-(12, 'Canceled', 2, 5, 0, 0, 0, '2023-10-25 09:21:24', '2023-10-25 09:23:13');
+INSERT INTO `task_lists` (`id`, `name`, `open_tasks`, `completed_tasks`, `position`, `is_completed`, `is_trashed`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'To Do', 7, 0, 0, 0, 0, NULL, NULL, NULL),
+(2, 'In Progress', 3, 0, 1, 0, 0, NULL, NULL, NULL),
+(3, 'Blocked', 0, 0, 2, 0, 1, NULL, NULL, NULL),
+(4, 'Ready for review', 3, 1, 3, 0, 0, NULL, NULL, NULL),
+(5, 'Testing', 1, 1, 4, 0, 0, NULL, NULL, NULL),
+(12, 'Canceled', 2, 5, 0, 0, 0, '2023-10-25 09:21:24', '2023-10-27 07:31:38', NULL),
+(13, 'DEFAULT NAME of Task List', 0, 0, 0, 0, 0, '2023-10-27 05:41:48', '2023-10-27 07:32:03', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

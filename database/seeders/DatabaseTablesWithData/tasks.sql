@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 26, 2023 at 02:44 PM
+-- Generation Time: Oct 27, 2023 at 09:36 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.0.26
 
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `tasks_task_list_id_foreign` (`task_list_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `tasks`
@@ -71,7 +71,8 @@ INSERT INTO `tasks` (`id`, `name`, `is_completed`, `task_list_id`, `position`, `
 (21, 'Srdjan Test Task 01', 0, 1, 1, '2023-05-08 00:00:00', '2023-05-10 00:00:00', '[]', 0, 0, '[1,2,3]', 0, NULL, '2023-10-24 14:27:33', '2023-10-24 14:29:14'),
 (22, 'Srdjan Test Task 02', 0, 3, 1, '2023-05-08 00:00:00', '2023-05-10 00:00:00', '[]', 0, 0, '[1]', 0, NULL, '2023-10-24 14:28:04', '2023-10-24 14:28:57'),
 (23, 'Srdjan Test Task 03', 1, 4, 1, '2023-05-08 00:00:00', '2023-05-10 00:00:00', '[1,2,3]', 0, 0, '[1]', 0, '2023-05-12 00:00:00', '2023-10-24 14:28:39', '2023-10-24 14:28:39'),
-(26, 'Srdjan Test Task 04', 0, 12, 0, NULL, NULL, '[]', 0, 0, '[]', 0, NULL, '2023-10-26 12:43:34', '2023-10-26 12:43:34');
+(26, 'Srdjan Test Task 04', 0, 12, 0, NULL, NULL, '[]', 0, 0, '[]', 0, NULL, '2023-10-26 12:43:34', '2023-10-26 12:43:34'),
+(27, 'Srdjan Test Task 05', 0, 4, 0, NULL, NULL, '[]', 0, 0, '[]', 0, NULL, '2023-10-26 12:57:22', '2023-10-26 16:46:20');
 
 --
 -- Constraints for dumped tables

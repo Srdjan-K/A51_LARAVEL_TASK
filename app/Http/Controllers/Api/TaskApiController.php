@@ -72,6 +72,11 @@ class TaskApiController extends Controller
 
     public function store(Request $request){
         
+        $status = "";
+        $count = 0;
+        $message = "";
+
+
         $input = $request->all();
         // $user_id = Auth::id();
 
@@ -81,35 +86,52 @@ class TaskApiController extends Controller
         $task["is_completed"] = ( isset($input["is_completed"]) && !empty($input["is_completed"]) ) ? $input["is_completed"] : 0;
         $task["task_list_id"] =  ( isset($input["task_list_id"]) && !empty($input["task_list_id"]) ) ? $input["task_list_id"] : 1;
         $task["position"] =  ( isset($input["position"]) && !empty($input["position"]) ) ? $input["position"] : 0;
-        $task["start_on"] =  $input["start_on"];
-        $task["due_on"] =  $input["due_on"];
+        $task["start_on"] = ( isset($input["start_on"]) && !empty($input["start_on"]) ) ? $input["position"] : NULL;
+        $task["due_on"] =  ( isset($input["due_on"]) && !empty($input["due_on"]) ) ? $input["due_on"] : NULL;
         $task["labels"] =  ( isset($input["labels"]) && !empty($input["labels"]) ) ? $input["labels"] : "[]";
         $task["open_subtasks"] =  ( isset($input["open_subtasks"]) && !empty($input["open_subtasks"]) ) ? $input["open_subtasks"] : 0;
         $task["comments_count"] =  ( isset($input["comments_count"]) && !empty($input["comments_count"]) ) ? $input["comments_count"] : 0;
         $task["assignee"] =  ( isset($input["assignee"]) && !empty($input["assignee"]) ) ? $input["assignee"] : "[]";
         $task["is_important"] =  ( isset($input["is_important"]) && !empty($input["is_important"]) ) ? $input["is_important"] : 0;
-        $task["completed_on"] =  $input["completed_on"];
+        $task["completed_on"] = ( isset($input["completed_on"]) && !empty($input["completed_on"]) ) ? $input["completed_on"] : NULL;
 
         // persisting file data into database
         $task_id = Task::create($task)->id;
 
-        Session::flash('task_created_message', 'Task : ' . $task_id . ' / ' . $input["task_name"] . ' , was created !');   // temp session , for messages on FrontEnd
+        if( !empty($task_id) && $task_id > 0 ){
+            $status = "success";
+            $count++;
+            $message .= 'Task : ' . $task_id . ' / ' . $task["name"] . ' , was created !'; 
+        }else{
+            $status = "fail";
+            $message .= 'Task : ' . $task_id . ' / ' . $task["name"] . ' , was NOT created !'; 
+        }
 
-        return redirect()->route('tasks.view');
+
+        return response()->json([
+            "status" => $status,
+            "count" => $count,
+            "message" => $message,
+            "data" => $task,
+        ]);
     
     }
 
 
-    public function edit(Task $task){
+    // public function edit(Task $task){
 
-        $task_lists = TaskList::all();
+    //     $task_lists = TaskList::all();
 
-        return view('tasks.edit', ['task' => $task, 'task_lists' => $task_lists] );
+    //     return view('tasks.edit', ['task' => $task, 'task_lists' => $task_lists] );
 
-    }
+    // }
 
 
-    public function update(Request $request,Task $task){
+    public function update(Request $request , Task $task){
+
+        $status = "";
+        $count = 0;
+        $message = "";
 
         $input = $request->all();
         // $user_id = Auth::id();
@@ -118,27 +140,40 @@ class TaskApiController extends Controller
 
         $task = Task::find($task->id);
 
-        $task->name =  $input["task_name"];
-        $task->is_completed =  $input["task_is_completed"];
-        $task->name =  $input["task_name"];
-        $task->task_list_id =  $input["task_task_list_id"];
-        $task->position =  $input["task_position"];
-        $task->start_on =  $input["task_start_on"];
-        $task->due_on =  $input["task_due_on"];
-        $task->labels =  $input["task_labels"];
-        $task->open_subtasks =  $input["task_open_subtasks"];
-        $task->comments_count =  $input["task_comments_count"];
-        $task->assignee =  $input["task_assignee"];
-        $task->is_important =  $input["task_is_important"];
-        $task->completed_on =  $input["task_completed_on"];
+        $task->name = ( isset($input["name"]) && !empty($input["name"]) ) ? $input["name"] : $task->name;
+        $task->is_completed = ( isset($input["is_completed"]) && !empty($input["is_completed"]) ) ? $input["is_completed"] : $task->is_completed;
+        $task->task_list_id =  ( isset($input["task_list_id"]) && !empty($input["task_list_id"]) ) ? $input["task_list_id"] : $task->task_list_id;
+        $task->position =  ( isset($input["position"]) && !empty($input["position"]) ) ? $input["position"] : $task->position;
+        $task->start_on = ( isset($input["start_on"]) && !empty($input["start_on"]) ) ? $input["position"] : $task->start_on;
+        $task->due_on =  ( isset($input["due_on"]) && !empty($input["due_on"]) ) ? $input["due_on"] : $task->due_on;
+        $task->labels =  ( isset($input["labels"]) && !empty($input["labels"]) ) ? $input["labels"] : $task->labels;
+        $task->open_subtasks =  ( isset($input["open_subtasks"]) && !empty($input["open_subtasks"]) ) ? $input["open_subtasks"] : $task->open_subtasks;
+        $task->comments_count =  ( isset($input["comments_count"]) && !empty($input["comments_count"]) ) ? $input["comments_count"] : $task->comments_count;
+        $task->assignee =  ( isset($input["assignee"]) && !empty($input["assignee"]) ) ? $input["assignee"] : $task->assignee;
+        $task->is_important =  ( isset($input["is_important"]) && !empty($input["is_important"]) ) ? $input["is_important"] : $task->is_important;
+        $task->completed_on = ( isset($input["completed_on"]) && !empty($input["completed_on"]) ) ? $input["completed_on"] : $task->completed_on;
+
 
         // $this->authorize('update', $task);      // policy check , edit ONLY MY task 
-        $task->save();
-
-        Session::flash('task_updated_message', 'Task : ' . $task->id . ' / ' . $input["task_name"] . ' , was updated !');   // temp session , for messages on FrontEnd
+        $status = $task->save();
 
 
-        return redirect()->route('tasks.view');
+        if( $status ){
+            $status = "success";
+            $count++;
+            $message .= 'Task : ' . $task->id . ' / ' . $task->name . ' , was updated !';  
+        }else{
+            $status = "fail";
+            $message .= 'Task : ' . $task->id . ' / ' . $task->name . ' , was NOT updated !'; 
+        }
+
+
+        return response()->json([
+            "status" => $status,
+            "count" => $count,
+            "message" => $message,
+            "data" => $task,
+        ]);
 
 
     }
@@ -146,11 +181,31 @@ class TaskApiController extends Controller
 
     public function destroy(Task $task){
 
-        $task->delete();
+        $status = "";
+        $count = 0;
+        $message = "";
 
-        Session::flash('task_deleted_message', 'Task : ' . $task->id . ' / ' . $task->name . ' , was deleted !');   // temp session , for messages on FrontEnd
 
-        return back();
+        $status = $task->delete();
+
+        
+
+        if( $status ){
+            $status = "success";
+            $count++;
+            $message .= 'Task : ' . $task->id . ' / ' . $task->name . ' , was deleted !';  
+        }else{
+            $status = "fail";
+            $message .= 'Task : ' . $task->id . ' / ' . $task->name . ' , was NOT deleted !';
+        }
+
+
+        return response()->json([
+            "status" => $status,
+            "count" => $count,
+            "message" => $message,
+            "data" => $task,
+        ]);
 
     }
 
