@@ -1,5 +1,62 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
+
+
+
+
+
+Notes - Data - Info 
+----------------------------------------------
+INSTALLATION STEPS
+
+- Create Database with PhpMyAdmin , with name : 	a51_laravel_db
+- Go to DEVELOP branch :				git checkout develop
+- BackEnd PHP Laravel Vendor download : 		composer install
+- Database MIGRATION terminal command : 		php artisan migrate
+- Data for Database IMPORT terminal command : 		php artisan db:seed
+
+- FrontEnd NodeModules install command : 		npm install
+
+- Laravel Project run terminal command : 		php artisan serve
+- FrontEnd run terminal command : 			npm run dev
+
+- If needed generate API key on button, 
+then REFRESH button :					Generate API Key
+
+----------------------------------------------
+Register new admin, or use existing one :
+
+email : 	admin.test@gmail.com
+passw :		admin.test.123
+
+----------------------------------------------
+// --- API Routes
+
+Authorization with Postman, Basic Auth, with
+email and password.
+
+http://127.0.0.1:8000/api/tasks - get all tasks
+http://127.0.0.1:8000/api/tasks/{id} - get single task
+http://127.0.0.1:8000/api/tasks/store - create task
+http://127.0.0.1:8000/api/tasks/update/{task} - update task
+http://127.0.0.1:8000/api/tasks/delete/{task} - delete task
+
+
+http://127.0.0.1:8000/api/task-lists - get all task lists
+http://127.0.0.1:8000/api/task-lists/{id} - get single task list
+http://127.0.0.1:8000/api/task-lists/store - create task list
+http://127.0.0.1:8000/api/task-lists/update/{task_list} - update task list
+http://127.0.0.1:8000/api/task-lists/delete/{task_list} - delete SOFT task list, Hard delete, and
+RESTORE, is only available, from inside app, when logged in : 
+http://127.0.0.1:8000/login
+
+
+----------------------------------------------
+----------------------------------------------
+
+
+
+
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
